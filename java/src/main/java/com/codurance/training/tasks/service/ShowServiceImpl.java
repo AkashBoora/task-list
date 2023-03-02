@@ -18,7 +18,7 @@ public class ShowServiceImpl implements ShowService {
 		for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
 			out.println(project.getKey());
 			for (Task task : project.getValue()) {
-				out.printf("    [%c] %s: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
+				out.printf("    [%c] %s: %s %n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
 			}
 			out.println();
 		}
