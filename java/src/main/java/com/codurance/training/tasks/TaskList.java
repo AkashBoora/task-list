@@ -15,11 +15,13 @@ public final class TaskList implements Runnable {
     private final BufferedReader in;
     private final PrintWriter out;
 
-    ShowService showService;
-    CheckService checkService;
-    ProjectService projectService;
-    TaskService taskService;
-    DeleteService deleteService;
+    private final ShowService showService;
+    private final CheckService checkService;
+    private final ProjectService projectService;
+    private final TaskService taskService;
+    private final DeleteService deleteService;
+    private final Utility utility;
+    private final ExecuteService executeService;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -30,11 +32,13 @@ public final class TaskList implements Runnable {
     public TaskList(BufferedReader reader, PrintWriter writer) {
         this.in = reader;
         this.out = writer;
+        utility = new UtilityImpl();
         projectService = new ProjectServiceImpl(tasks);
-        taskService = new TaskServiceImpl(tasks, out);
+        taskService = new TaskServiceImpl(tasks, out,utility);
         deleteService = new DeleteServiceImpl(tasks, writer);
         checkService = new CheckServiceImpl(tasks, out);
-        showService = new ShowServiceImpl(out);
+        showService = new ShowServiceImpl(out,utility);
+        executeService = new ExecuteServiceImpl(this,checkService,deleteService,taskService,showService,tasks);
     }
 
     public void run() {
@@ -50,46 +54,12 @@ public final class TaskList implements Runnable {
             if (command.equals(QUIT)) {
                 break;
             }
-            execute(command);
+            executeService.execute(command);
         }
     }
 
-    private void execute(String commandLine) {
-        String[] commandRest = commandLine.split(" ", 2);
-        String command = commandRest[0];
-        switch (command) {
-            case "add":
-                add(commandRest[1]);
-                break;
-            case "check":
-                checkService.check(commandRest[1]);
-                break;
-            case "uncheck":
-                checkService.uncheck(commandRest[1]);
-                break;
-            case "delete":
-                deleteService.delete(commandRest[1]);
-                break;
-            case "deadline":
-                String[] taskDeadline = commandRest[1].split(" ", 2);
-                taskService.addDeadlineToTask(taskDeadline[0], taskDeadline[1]);
-                break;
-            case "today":
-                showService.showDueTodayTasks(tasks);
-                break;
-            case "view":
-                view(commandRest[1]);
-                break;
-            case "help":
-                help();
-                break;
-            default:
-                error(command);
-                break;
-        }
-    }
 
-    private void add(String commandLine) {
+    public void add(String commandLine) {
         String[] subcommandRest = commandLine.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
@@ -100,7 +70,7 @@ public final class TaskList implements Runnable {
         }
     }
 
-    private void view(String command) {
+    public void view(String command) {
         if(command.equals("by date"))
             showService.showByDate(tasks);
         else if(command.equals("by deadline"))
@@ -111,7 +81,7 @@ public final class TaskList implements Runnable {
             error(command);
     }
 
-    private void help() {
+    public void help() {
         out.println("Commands:");
         out.println("  add project <project name>");
         out.println("  add task <project name> <task ID> <task description>");
@@ -126,7 +96,7 @@ public final class TaskList implements Runnable {
         out.println();
     }
 
-    private void error(String command) {
+    public void error(String command) {
         out.printf("I don't know what the command \"%s\" is.", command);
         out.println();
     }

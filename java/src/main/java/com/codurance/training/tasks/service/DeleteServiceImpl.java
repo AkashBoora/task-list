@@ -3,13 +3,12 @@ package com.codurance.training.tasks.service;
 import com.codurance.training.tasks.Task;
 
 import java.io.PrintWriter;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DeleteServiceImpl implements DeleteService{
 
-	private Map<String, List<Task>> tasks = new LinkedHashMap<>();
+	private final Map<String, List<Task>> tasks;
 
 	private final PrintWriter out;
 

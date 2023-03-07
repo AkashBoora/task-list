@@ -3,14 +3,13 @@ package com.codurance.training.tasks.service;
 import com.codurance.training.tasks.Task;
 
 import java.io.PrintWriter;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CheckServiceImpl implements CheckService {
 
 	private final PrintWriter out;
-	private Map<String, List<Task>> tasks = new LinkedHashMap<>();
+	private final Map<String, List<Task>> tasks;
 
 	public CheckServiceImpl(Map<String, List<Task>> tasks, PrintWriter writer) {
 		this.out = writer;
@@ -36,7 +35,7 @@ public class CheckServiceImpl implements CheckService {
 				}
 			}
 		}
-		out.printf("Could not find a task with an ID of %d.", taskId);
+		out.printf("Could not find a task with an ID of %s.", taskId);
 		out.println();
 	}
 }

@@ -63,7 +63,7 @@ public final class ApplicationTest {
         execute("view by project");
         readLines(
             "secrets",
-            "    [ ] abc: Eat more donuts. ",
+            "    [ ] abc: Eat more donuts.",
             "    [ ] def: Destroy all humans.",
             ""
         );
@@ -83,19 +83,18 @@ public final class ApplicationTest {
 		execute("uncheck fgh");
 		execute("deadline abc 02-03-2023");
 		execute("delete jkl");
-		execute("today");
+		execute("view by project");
 		readLines(
 				"secrets",
 				"    [x] abc: Eat more donuts.",
-				"    [ ] 2: Destroy all humans.",
+				"    [ ] def: Destroy all humans.",
 				"",
 				"training",
-				"    [x] 3: Four Elements of Simple Design",
-				"    [ ] 4: SOLID",
-				"    [x] 5: Coupling and Cohesion",
-				"    [x] 6: Primitive Obsession",
-				"    [ ] 7: Outside-In TDD",
-				"    [ ] 8: Interaction-Driven Design",
+				"    [x] asd: Four Elements of Simple Design",
+				"    [ ] sdf: SOLID",
+				"    [x] dfg: Coupling and Cohesion",
+				"    [ ] fgh: Primitive Obsession",
+				"    [ ] hjk: Outside-In TDD",
 				""
 		);
 
