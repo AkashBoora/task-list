@@ -13,10 +13,7 @@ public class TaskServiceImpl implements TaskService{
 
 	private final PrintWriter out;
 
-
-	private final Utility utility;
-	public TaskServiceImpl(Map<String, List<Task>> tasks, PrintWriter writer, Utility utility) {
-		this.utility = utility;
+	public TaskServiceImpl(Map<String, List<Task>> tasks, PrintWriter writer) {
 		this.tasks = tasks;
 		this.out = writer;
 	}
@@ -28,7 +25,7 @@ public class TaskServiceImpl implements TaskService{
 			out.println();
 			return;
 		}
-		if(utility.checkIdValidity(taskId))
+		if(Utility.checkIdValidity(taskId))
 			projectTasks.add(new Task(taskId, description, false));
 		else
 			out.println("Id should not contain spaces or special characters");
@@ -36,7 +33,7 @@ public class TaskServiceImpl implements TaskService{
 
 	@Override
 	public void addDeadlineToTask(String taskId, String deadline) {
-		Date date = utility.parseDate(deadline);
+		Date date = Utility.parseDate(deadline);
 		for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
 			for(Task task: project.getValue()) {
 				if(task.getId().equals(taskId)) {

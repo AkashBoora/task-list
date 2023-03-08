@@ -2,25 +2,29 @@ package com.codurance.training.tasks.service;
 
 import com.codurance.training.tasks.Task;
 import com.codurance.training.tasks.TaskList;
+import com.codurance.training.tasks.TaskListUtility;
 
 import java.util.List;
 import java.util.Map;
 
 public class ExecuteServiceImpl implements ExecuteService{
-	private final TaskList taskList;
+	private final TaskListUtility taskListUtility;
 	private final CheckService checkService;
 	private final DeleteService deleteService;
 	private final TaskService taskService;
 	private final ShowService showService;
 	private final Map<String, List<Task>> tasks;
 
-	public ExecuteServiceImpl(TaskList taskList, CheckService checkService, DeleteService deleteService, TaskService taskService, ShowService showService, Map<String, List<Task>> tasks) {
-		this.taskList = taskList;
+	private final AddService addService;
+
+	public ExecuteServiceImpl(TaskListUtility taskListUtility, CheckService checkService, DeleteService deleteService, TaskService taskService, ShowService showService, Map<String, List<Task>> tasks, AddService addService) {
+		this.taskListUtility = taskListUtility;
 		this.checkService = checkService;
 		this.deleteService = deleteService;
 		this.taskService = taskService;
 		this.showService = showService;
 		this.tasks = tasks;
+		this.addService = addService;
 	}
 
 	@Override
@@ -29,7 +33,7 @@ public class ExecuteServiceImpl implements ExecuteService{
 		String command = commandRest[0];
 		switch (command) {
 			case "add":
-				taskList.add(commandRest[1]);
+				addService.add(commandRest[1]);
 				break;
 			case "check":
 				checkService.check(commandRest[1]);
@@ -48,13 +52,13 @@ public class ExecuteServiceImpl implements ExecuteService{
 				showService.showDueTodayTasks(tasks);
 				break;
 			case "view":
-				taskList.view(commandRest[1]);
+				taskListUtility.view(commandRest[1]);
 				break;
 			case "help":
-				taskList.help();
+				taskListUtility.help();
 				break;
 			default:
-				taskList.error(command);
+				taskListUtility.error(command);
 				break;
 		}
 	}
